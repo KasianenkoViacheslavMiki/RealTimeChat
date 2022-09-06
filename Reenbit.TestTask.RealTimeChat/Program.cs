@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Reenbit.TestTask.RealTimeChat.Hubs;
 using Reenbit.TestTask.RealTimeChat.Models;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddSignalR();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<MessageRepository>();
@@ -31,5 +33,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.MapHub<ChatHub>("/chatHub");
 app.Run();
