@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Reenbit.TestTask.RealTimeChat.Models.Message>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+@*<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TextMessage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateMessage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Room)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>*@
+@foreach (var item in Model) {
+    
+    
+        <div class="chat-message-left pb-4">
+                     <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                      <div class="font-weight-bold mb-1">@Html.DisplayFor(modelItem => item.User.UserName)</div>
+                    @Html.DisplayFor(modelItem => item.TextMessage)
+                    </div>
+        </div>
+    
+    
+    @*
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TextMessage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateMessage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Room.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Id)
+            </td>
+        </tr>*@
+}
+@*    </tbody>
+</table>*@
+
+<div class="flex-grow-0 py-3 px-4 border-top">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Type your message">
+        <button class="btn btn-primary">Send</button>
+    </div>
+</div>
