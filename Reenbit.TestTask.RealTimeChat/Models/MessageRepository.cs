@@ -12,6 +12,7 @@ namespace Reenbit.TestTask.RealTimeChat.Models
         }
         public IQueryable<Message> GetMessages(int roomId)
         {
+            
             return _context.Messages.Where(x => x.RoomId == roomId).OrderBy(x => x.DateMessage).Include("User");
 
 

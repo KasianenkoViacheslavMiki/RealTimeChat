@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Reenbit.TestTask.RealTimeChat.Hubs;
 using Reenbit.TestTask.RealTimeChat.Models;
 //using Reenbit.TestTask.RealTimeChat.Models;
 using System.Diagnostics;
@@ -15,15 +17,24 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         //    _logger = logger;
         //}
         private readonly MessageRepository _messageRepository;
-        public HomeController(MessageRepository messageRepository)
+        private readonly IHubContext<ChatHub> _hubContext;
+        public HomeController(MessageRepository messageRepository, IHubContext<ChatHub> hubContext)
         {
             _messageRepository = messageRepository;
+            _hubContext = hubContext;
         }
 
         public IActionResult Privacy()
         {
             return View();
         }
+        [HttpGet]
+        public IActionResult GetMessagesChat()
+        {
+            var model =  _messageRepository.GetMessages(3);
+            return Ok(model);
+        }
+
         public async Task<IActionResult> Index()
         {
             var model = _messageRepository.GetMessages(3);

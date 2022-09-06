@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Reenbit.TestTask.RealTimeChat.Hubs;
 using Reenbit.TestTask.RealTimeChat.Models;
 using Microsoft.AspNetCore.SignalR;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSignalR();
@@ -12,7 +13,13 @@ builder.Services.AddTransient<MessageRepository>();
 //builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer("Data Source=HOME-PC\\SQLEXPRESS;Initial Catalog=ChatDB;Integrated Security=True"));
 builder.Services.AddDbContext<ChatDBContext>(options =>
                 options.UseSqlServer("Data Source=HOME-PC\\SQLEXPRESS;Initial Catalog=ChatDB;Integrated Security=True"));
-builder.Services.AddControllersWithViews();
+
+builder.Services.AddControllers().AddJsonOptions(option =>
+{
+    option.JsonSerializerOptions.PropertyNamingPolicy = null;
+    option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
