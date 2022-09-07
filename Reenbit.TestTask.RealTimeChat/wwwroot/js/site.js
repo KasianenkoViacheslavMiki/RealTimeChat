@@ -8,7 +8,7 @@ $(() => {
     var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
     document.getElementById("sendButton").disabled = true;
 
-    connection.on("LoadMessages", function (user, message) {
+    connection.on("LoadMessages", function () {
         LoadMessages();
     });
     connection.on("ReceiveMessage", function (user, message) {
@@ -38,22 +38,44 @@ $(() => {
 
 
     function AddMessages(message, user) {
+        var date = new Date();
+        var dateStr =
+            ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
+            ("00" + date.getDate()).slice(-2) + "/" +
+            date.getFullYear() + " " +
+            ("00" + date.getHours()).slice(-2) + ":" +
+            ("00" + date.getMinutes()).slice(-2) + ":" +
+            ("00" + date.getSeconds()).slice(-2);
+            $.ajax({
+                url: '/Home/Index',
+                method: 'POST',
+                data: {
+                    TextMessage: message,
+                }
+            })
         var divMessage = document.createElement("div");
         divMessage.className = "chat-message-left pb-4";
 
         var divBlock = document.createElement("div");
         divBlock.className = "flex-shrink-1 bg-light rounded py-2 px-3 ml-3";
 
+        var divName = document.createElement("div");
+        divName.className = "font-weight-bold mb-1 fw-bold";
+        divName.textContent = user;
+
         var divText = document.createElement("div");
         divText.textContent = message;
 
-        var divName = document.createElement("div");
-        divName.className = "font-weight-bold mb-1";
-        divName.textContent = user;
+        var divDate = document.createElement("div");
+        divDate.className = "d-flex flex-row justify-content-end p-1";
+        
+        divDate.textContent = dateStr;
 
         divBlock.appendChild(divName);
+        divBlock.appendChild(document.createElement("p"));
         divBlock.appendChild(divText);
         divMessage.appendChild(divBlock);
+        divMessage.appendChild(divDate);
         document.querySelector('#chat').appendChild(divMessage);
         document.querySelector('#chat').lastElementChild.scrollIntoView();
     }
@@ -69,7 +91,7 @@ $(() => {
                         `<div class="chat-message-left pb-4">
                     
                      <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                            <div class="font-weight-bold mb-1"><b>${v.User.UserName}</b></div><p>
+                            <div class="font-weight-bold fw-bold mb-1">${v.User.UserName}</div><p>
                         <div>${v.TextMessage} </div>
                     </div>
                         <div class="d-flex flex-row justify-content-end p-1">
@@ -88,4 +110,4 @@ $(() => {
         
     }
 })
-document.querySelector('#chat').lastElementChild.scrollIntoView();
+//document.querySelector('#chat').lastElementChild.scrollIntoView();
