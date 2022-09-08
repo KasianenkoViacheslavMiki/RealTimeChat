@@ -8,14 +8,15 @@ $(() => {
     var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
     document.getElementById("sendButton").disabled = true;
 
-    connection.on("LoadMessages", function () {
-        LoadMessages();
+    connection.on("LoadMessages", function (_roomId) {
+        LoadMessages(_roomId);
     });
-    connection.on("ReceiveMessage", function (user, message) {
-        AddMessages(message, user);
+    connection.on("ReceiveMessage", function (user, message, _idRoom, _idUser) {
+        AddMessages(user, message, _idRoom, _idUser);
     });
-    LoadMessages();
- 
+
+    LoadMessages(document.getElementById("idRoom").value);
+    
 
 
     connection.start().then(function () {
@@ -23,11 +24,28 @@ $(() => {
     }).catch(function (err) {
         return console.error(err.toString());
     });
+   
 
     document.getElementById("sendButton").addEventListener("click", function (event) {
         var user = "Miki";
         var message = document.getElementById("messageInput").value;
-        connection.invoke("SendMessage", user, message).catch(function (err) {
+        var idUser = "1"
+        var idRoom = document.getElementById("idRoom").value;
+        //var message = typeMessage();
+        //message.TextMessage = document.getElementById("messageInput").value;
+        //message.UserName = "Miki";
+        //message.IdUser = 1;
+        //message.IdRoom = document.getElementById("idRoom").value;
+        $.ajax({
+                url: '/Home/SendMessage',
+                method: 'POST',
+                data: {
+                    TextMessage: message,
+                    UserId: idUser,
+                    RoomId: idRoom,
+                }
+        })
+        connection.invoke("SendMessageServer",user,message,3,1).catch(function (err) {
             return console.error(err.toString());
         });
         event.preventDefault();
@@ -36,8 +54,7 @@ $(() => {
 
 
 
-
-    function AddMessages(message, user) {
+    function AddMessages(user, message, _idRoom,_idUser) {
         var date = new Date();
         var dateStr =
             ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
@@ -46,13 +63,7 @@ $(() => {
             ("00" + date.getHours()).slice(-2) + ":" +
             ("00" + date.getMinutes()).slice(-2) + ":" +
             ("00" + date.getSeconds()).slice(-2);
-            $.ajax({
-                url: '/Home/Index',
-                method: 'POST',
-                data: {
-                    TextMessage: message,
-                }
-            })
+        
         var divMessage = document.createElement("div");
         divMessage.className = "content chat-message-left pb-4";
 
@@ -68,7 +79,7 @@ $(() => {
         deleteButton.type = "button";
         deleteButton.className = "button";
         deleteButton.ariaLabel = "Видалити";
-        deleteButton.value = "&timesb;";
+        deleteButton.value = "✖";
 
         var editButton = document.createElement("input");
         editButton.type = "button";
@@ -80,7 +91,12 @@ $(() => {
         answerButton.type = "button";
         answerButton.className = "button";
         answerButton.ariaLabel = "Відповісти";
-        answerButton.value = "&#64;";
+        answerButton.value = "@";
+
+        divButtonsGroup.appendChild(deleteButton);
+        divButtonsGroup.appendChild(editButton);
+        divButtonsGroup.appendChild(answerButton);
+        divButtonsContainer.appendChild(divButtonsGroup);
 
         var divBlock = document.createElement("div");
         divBlock.className = "flex-shrink-1 bg-light rounded py-2 px-3 ml-3";
@@ -100,29 +116,36 @@ $(() => {
         divBlock.appendChild(divName);
         divBlock.appendChild(document.createElement("p"));
         divBlock.appendChild(divText);
+
+        divMessage.appendChild(divButtonsContainer);
         divMessage.appendChild(divBlock);
         divMessage.appendChild(divDate);
         document.querySelector('#chat').appendChild(divMessage);
         document.querySelector('#chat').lastElementChild.scrollIntoView();
     }
 
-    function LoadMessages() {
+    function LoadMessages(_idRoom) {
         var tr = '';
         $.ajax({
-            url: '/Home/GetMessagesChat',
-            method: 'GET',
+            url: '/Home/GetMessagesRoomChat',
+            method: 'POST',
+            data: {
+                IdRoom :_idRoom
+            },
             success: (result) => {
                 $.each(result, (k, v) => {
                     tr = tr +
-                        `<div class="content chat-message-left pb-4">
+                        `<div id= "id=${v.Id}" class="content chat-message-left pb-4">
+                    <input  runat="server" value="${v.Id}" type="hidden"></input>
                     <div class="hide buttons-container" role="group" aria-label="Дії з повідомленнями">
         <div class="d-flex  justify-content-end">
-            <input  type="button" class="button" aria-label="Видалити"   value=&timesb; role="button" tabindex="0"></input>
+            <input  type="button" class="button" aria-label="Видалити"   value=&#x2716; role="button" tabindex="0"></input>
             <input  type="button" class="button" aria-label="Редагувати" value="ED"     role="button" tabindex="0"></input>
             <input  type="button" class="button" aria-label="Відповисти" value=&#64;    role="button" tabindex="0"></input>
         </div>
     </div>
                      <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                           <input  runat="server" value="${v.UserId}" type="hidden"></input> 
                             <div class="font-weight-bold fw-bold mb-1">${v.User.UserName}</div><p>
                         <div>${v.TextMessage} </div>
                     </div>
@@ -141,5 +164,33 @@ $(() => {
         });
         
     }
+        function typeMessage() {
+            var typeMessage = Object.create({},
+                {
+                TextMessage: {
+                    writable: true, 
+                    configurable: true,
+                    value: ""
+                },
+                UserName: {
+                    writable: true, 
+                    configurable: true,
+                    value: ""
+                },
+                IdUser: {
+                    writable: true,
+                    configurable: true,
+                    value: 0
+                },
+                IdRoom: {
+                    writable: true,
+                    configurable: true,
+                    value: 0
+                }
+                }
+                );
+            return typeMessage;
+        }
 })
 //document.querySelector('#chat').lastElementChild.scrollIntoView();
+

@@ -32,10 +32,10 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         {
             return View();
         }
-        [HttpGet]
-        public IActionResult GetMessagesChat()
+        [HttpPost]
+        public IActionResult GetMessagesRoomChat(int IdRoom)
         {
-            var model =  _messageRepository.GetMessages(3);
+            var model =  _messageRepository.GetMessages(IdRoom);
             return Ok(model);
         }
         [HttpGet]
@@ -44,10 +44,10 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Chat(Message message)
+        public async Task<IActionResult> SendMessage(Message message)
         {
             message.DateMessage = DateTime.Now;
-            if (!ModelState.IsValid) return View(); 
+            if (!ModelState.IsValid) return View();
             _chatDBContext.Add(message);
             await _chatDBContext.SaveChangesAsync();
             return View(message);
