@@ -54,7 +54,33 @@ $(() => {
                 }
             })
         var divMessage = document.createElement("div");
-        divMessage.className = "chat-message-left pb-4";
+        divMessage.className = "content chat-message-left pb-4";
+
+        var divButtonsContainer = document.createElement("div");
+        divButtonsContainer.className = "hide buttons-container";
+        divButtonsContainer.ariaRoleDescription = "group";
+        divButtonsContainer.ariaLabel = "Дії з повідомленнями";
+
+        var divButtonsGroup = document.createElement("div");
+        divButtonsGroup.className = "d-flex justify-content-end";
+
+        var deleteButton = document.createElement("input");
+        deleteButton.type = "button";
+        deleteButton.className = "button";
+        deleteButton.ariaLabel = "Видалити";
+        deleteButton.value = "&timesb;";
+
+        var editButton = document.createElement("input");
+        editButton.type = "button";
+        editButton.className = "button";
+        editButton.ariaLabel = "Редагувати";
+        editButton.value = "ED";
+
+        var answerButton = document.createElement("input");
+        answerButton.type = "button";
+        answerButton.className = "button";
+        answerButton.ariaLabel = "Відповісти";
+        answerButton.value = "&#64;";
 
         var divBlock = document.createElement("div");
         divBlock.className = "flex-shrink-1 bg-light rounded py-2 px-3 ml-3";
@@ -88,8 +114,14 @@ $(() => {
             success: (result) => {
                 $.each(result, (k, v) => {
                     tr = tr +
-                        `<div class="chat-message-left pb-4">
-                    
+                        `<div class="content chat-message-left pb-4">
+                    <div class="hide buttons-container" role="group" aria-label="Дії з повідомленнями">
+        <div class="d-flex  justify-content-end">
+            <input  type="button" class="button" aria-label="Видалити"   value=&timesb; role="button" tabindex="0"></input>
+            <input  type="button" class="button" aria-label="Редагувати" value="ED"     role="button" tabindex="0"></input>
+            <input  type="button" class="button" aria-label="Відповисти" value=&#64;    role="button" tabindex="0"></input>
+        </div>
+    </div>
                      <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
                             <div class="font-weight-bold fw-bold mb-1">${v.User.UserName}</div><p>
                         <div>${v.TextMessage} </div>

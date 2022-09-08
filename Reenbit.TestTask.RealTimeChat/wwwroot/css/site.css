@@ -16,3 +16,16 @@ html {
 body {
   margin-bottom: 60px;
 }
+.hide {
+    visibility: hidden;
+}
+
+.content:hover .hide {
+    visibility: visible;
+}
+
+.buttons-container {
+    position: relative;
+    z-index: 1;
+    top: 30px;
+}

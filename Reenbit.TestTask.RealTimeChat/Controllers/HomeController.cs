@@ -39,14 +39,13 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
             return Ok(model);
         }
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Chat()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Index(Message message)
+        public async Task<IActionResult> Chat(Message message)
         {
-            
             message.DateMessage = DateTime.Now;
             if (!ModelState.IsValid) return View(); 
             _chatDBContext.Add(message);
