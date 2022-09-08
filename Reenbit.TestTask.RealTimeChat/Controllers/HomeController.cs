@@ -13,16 +13,12 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ChatDBContext _chatDBContext;
-        //private ChatDBContext db;
-        //public HomeController(ILogger<HomeController> logger)
-        //{
-        //    _logger = logger;
-        //}
         private readonly MessageRepository _messageRepository;
         private readonly IHubContext<ChatHub> _hubContext;
 
-        public HomeController(MessageRepository messageRepository, IHubContext<ChatHub> hubContext, ChatDBContext context)
+        public HomeController(ILogger<HomeController> logger,MessageRepository messageRepository, IHubContext<ChatHub> hubContext, ChatDBContext context)
         {
+            _logger = logger;
             _messageRepository = messageRepository;
             _hubContext = hubContext;
             _chatDBContext = context;
