@@ -50,7 +50,7 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
             if (!ModelState.IsValid) return View();
             _chatDBContext.Add(message);
             await _chatDBContext.SaveChangesAsync();
-            return View(message);
+            return Ok(message);
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
