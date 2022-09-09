@@ -26,7 +26,10 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
             _hubContext = hubContext;
             _chatDBContext = context;
         }
-
+        public IActionResult Index()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
@@ -37,10 +40,9 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
             var model =  _messageRepository.GetChat(IdRoom);
             return Ok(model);
         }
-        [HttpGet]
+        [HttpGet("{Id}")]
         public IActionResult Chat(int id)
         {
-            
             return View(_messageRepository.GetChat(id));
         }
         [HttpPost]

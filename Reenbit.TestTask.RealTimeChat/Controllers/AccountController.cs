@@ -25,7 +25,7 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
             var result =  await _signInManager.PasswordSignInAsync(user, password,false,false);
             if (result.Succeeded)
             {
-                return RedirectToAction("Chat","Home");
+                return RedirectToAction("Index","Home");
             }
             }
             return RedirectToAction("Login","Account");
