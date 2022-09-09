@@ -37,7 +37,7 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
             return Ok(model);
         }
         [HttpGet]
-        public IActionResult Chat()
+        public IActionResult Chat(int id)
         {
             HttpContext.Session.SetString("UserName", "Miki");
             HttpContext.Session.SetInt32("UserId", 1);
