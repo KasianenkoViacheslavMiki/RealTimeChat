@@ -34,14 +34,14 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         [HttpPost]
         public IActionResult GetMessagesRoomChat(int IdRoom)
         {
-            var model =  _messageRepository.GetMessages(IdRoom);
+            var model =  _messageRepository.GetChat(IdRoom);
             return Ok(model);
         }
         [HttpGet]
         public IActionResult Chat(int id)
         {
             
-            return View(_messageRepository.GetMessages(id));
+            return View(_messageRepository.GetChat(id));
         }
         [HttpPost]
         public async Task<IActionResult> SendMessage(Message message)
