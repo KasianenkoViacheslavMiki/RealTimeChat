@@ -1,5 +1,7 @@
-﻿@model Reenbit.TestTask.RealTimeChat.Models.Message
+﻿@*@model Message
+*@
 
+@model IEnumerable<Message> 
 @{
     ViewData["Title"] = "Chat";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,8 +10,7 @@
 <html>
 
 <h1>Private chat</h1>
-<input asp-for="RoomId" runat="server" id="idRoom" value="3" type="hidden"></input  
-<div class="col-12 col-lg-7 col-xl-9">
+<div style="width:75%">
     <div class="py-2 px-4 border-bottom d-none d-lg-block">
         <div class="d-flex align-items-center py-1">
             <div class="flex-grow-1 pl-3">
@@ -20,14 +21,33 @@
 </div>
 
 <div id="chat" class="chat-messages p-4" style="overflow-y: scroll; height: 570px;" >
-
+    @foreach(var chat in Model)
+    {
+     <div id= "@chat.Id" class="content chat-message-left pb-4">
+        <input  runat="server" value="@chat.Id" type="hidden"></input>
+        <div class="hide buttons-container" role="group" aria-label="Дії з повідомленнями">
+            <div class="d-flex  justify-content-end">
+                <input  type="button" class="button" aria-label="Видалити"   value=&#x2716; role="button" tabindex="0"></input>
+                <input  type="button" class="button" aria-label="Редагувати" value="ED"     role="button" tabindex="0"></input>
+                <input  type="button" class="button" aria-label="Відповисти" value=&#64;    role="button" tabindex="0"></input>
+            </div>
+        </div>
+        <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+            <input  runat="server" value="@chat.UserId" type="hidden"></input> 
+            <div class="font-weight-bold fw-bold mb-1">@chat.User.UserName</div>
+                <div>@chat.TextMessage </div>
+            </div>
+            <div class="d-flex flex-row justify-content-end p-1">
+                <p>@chat.DateMessage</p>
+            </div>
+     </div>
+    }
 </div>
+<script>document.querySelector('#chat').lastElementChild.scrollIntoView();</script>
 
-<div class="flex-grow-0 py-3 px-4 border-top">
-        <form class="input-group" asp-action="Index" style="display:flex;">
-            <input asp-for="TextMessage" name="TextMessage" id="messageInput"type="text" class="form-control" placeholder="Type your message">
+<div class="input-group flex-grow-0 py-3 px-4 border-top">
+            <input  name="TextMessage" id="messageInput"type="text" class="form-control" placeholder="Type your message">
             <input  type="button" id="sendButton" class="btn btn-primary" value="Send Message"></input>
-        </form>
 </div>
 
 </html>

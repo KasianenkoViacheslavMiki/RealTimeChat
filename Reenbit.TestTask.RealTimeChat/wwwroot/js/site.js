@@ -28,8 +28,8 @@ $(() => {
     document.getElementById("sendButton").addEventListener("click", function (event) {
         var user = "Miki";
         var message = document.getElementById("messageInput").value;
-        var idUser = "1"
-        var idRoom = document.getElementById("idRoom").value;
+        var idUser = 1;
+        var idRoom = 3;
         //var message = typeMessage();
         //message.TextMessage = document.getElementById("messageInput").value;
         //message.UserName = "Miki";
@@ -44,12 +44,12 @@ $(() => {
                     RoomId: idRoom,
                 }
         })
-        connection.invoke("SendMessageServer",user,message,3,1).catch(function (err) {
+        connection.invoke("SendMessageServer", user, message, idRoom, idUser).catch(function (err) {
             return console.error(err.toString());
         });
         event.preventDefault();
     });
 })
-LoadMessages(document.getElementById("idRoom").value);
+/*LoadMessages(3);*/
 //document.querySelector('#chat').lastElementChild.scrollIntoView();
 

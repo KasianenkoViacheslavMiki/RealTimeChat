@@ -40,8 +40,9 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         public IActionResult Chat(int id)
         {
             HttpContext.Session.SetString("UserName", "Miki");
-            HttpContext.Session.SetInt32("UserId", 1);
-            return View();
+            HttpContext.Session.SetString("UserId", "1");
+
+            return View(_messageRepository.GetMessages(id));
         }
         [HttpPost]
         public async Task<IActionResult> SendMessage(Message message)

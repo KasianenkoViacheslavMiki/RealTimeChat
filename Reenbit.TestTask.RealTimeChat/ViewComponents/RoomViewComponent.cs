@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient.Server;
 using Microsoft.EntityFrameworkCore;
 using Reenbit.TestTask.RealTimeChat.Models;
 
@@ -21,7 +22,7 @@ namespace Reenbit.TestTask.RealTimeChat.ViewComponents
 
             var room = from rooms in chatDBContext.Rooms
                        join c in chatDBContext.Participants on rooms.Id equals c.RoomId
-                       where c.UserId == HttpContext.Session.GetInt32("UserId")
+                       where EF.Functions.Like(c.UserId,HttpContext.Session.GetString("UserId"))
                        select rooms;
             return View(room);
         }

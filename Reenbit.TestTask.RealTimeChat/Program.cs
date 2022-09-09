@@ -3,6 +3,7 @@ using Reenbit.TestTask.RealTimeChat.Hubs;
 using Reenbit.TestTask.RealTimeChat.Models;
 using Microsoft.AspNetCore.SignalR;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSignalR();
@@ -10,6 +11,7 @@ builder.Services.AddDistributedMemoryCache();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<MessageRepository>();
+
 // добавляем контекст ApplicationContext в качестве сервиса в приложение
 //builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer("Data Source=HOME-PC\\SQLEXPRESS;Initial Catalog=ChatDB;Integrated Security=True"));
 builder.Services.AddDbContext<ChatDBContext>(options =>
@@ -44,7 +46,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 app.UseSession();
-
+app.UseAuthentication();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Chat}/{id?}");

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Reenbit.TestTask.RealTimeChat.Models;
 
 namespace Reenbit.TestTask.RealTimeChat.Models
 {
-    public partial class ChatDBContext : DbContext
+    public partial class ChatDBContext : IdentityDbContext<User>
     {
         public ChatDBContext()
         {
@@ -84,20 +85,10 @@ namespace Reenbit.TestTask.RealTimeChat.Models
                     .IsFixedLength();
             });
 
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.ToTable("User");
 
-                entity.Property(e => e.UserName)
-                    .HasMaxLength(30)
-                    .IsFixedLength();
+            base.OnModelCreating(modelBuilder);
 
-                entity.Property(e => e.UserPassword)
-                    .HasMaxLength(30)
-                    .IsFixedLength();
-            });
-
-            OnModelCreatingPartial(modelBuilder);
+            //OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
