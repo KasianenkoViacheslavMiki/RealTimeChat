@@ -9,6 +9,7 @@ using System.Diagnostics;
 
 namespace Reenbit.TestTask.RealTimeChat.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,6 +19,7 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
 
         public HomeController(ILogger<HomeController> logger,MessageRepository messageRepository, IHubContext<ChatHub> hubContext, ChatDBContext context)
         {
+            
             _logger = logger;
             _messageRepository = messageRepository;
             _hubContext = hubContext;
@@ -37,6 +39,8 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         [HttpGet]
         public IActionResult Chat()
         {
+            HttpContext.Session.SetString("UserName", "Miki");
+            HttpContext.Session.SetInt32("UserId", 1);
             return View();
         }
         [HttpPost]
