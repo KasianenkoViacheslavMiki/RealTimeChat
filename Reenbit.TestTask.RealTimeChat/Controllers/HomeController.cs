@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -39,15 +40,14 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         [HttpGet]
         public IActionResult Chat(int id)
         {
-            HttpContext.Session.SetString("UserName", "Miki");
-            HttpContext.Session.SetString("UserId", "1");
-
+            
             return View(_messageRepository.GetMessages(id));
         }
         [HttpPost]
         public async Task<IActionResult> SendMessage(Message message)
         {
             message.DateMessage = DateTime.Now;
+            message.UserId = HttpContext.Session.GetString("UserId");
             if (!ModelState.IsValid) return View();
             _chatDBContext.Add(message);
             await _chatDBContext.SaveChangesAsync();

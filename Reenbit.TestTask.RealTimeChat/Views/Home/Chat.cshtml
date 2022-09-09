@@ -21,9 +21,11 @@
 </div>
 
 <div id="chat" class="chat-messages p-4" style="overflow-y: scroll; height: 570px;" >
+
+
     @foreach(var chat in Model)
     {
-     <div id= "@chat.Id" class="content chat-message-left pb-4">
+     <div id= "chat=@chat.Id" class="content chat-message-left pb-4">
         <input  runat="server" value="@chat.Id" type="hidden"></input>
         <div class="hide buttons-container" role="group" aria-label="Дії з повідомленнями">
             <div class="d-flex  justify-content-end">
@@ -42,12 +44,16 @@
             </div>
      </div>
     }
+
 </div>
 <script>document.querySelector('#chat').lastElementChild.scrollIntoView();</script>
 
 <div class="input-group flex-grow-0 py-3 px-4 border-top">
+   @* <form asp-controller="Home" asp-action="SendMessage">
+            <input type="hidden" name="chatID" value="@Model.Id"/>*@
             <input  name="TextMessage" id="messageInput"type="text" class="form-control" placeholder="Type your message">
-            <input  type="button" id="sendButton" class="btn btn-primary" value="Send Message"></input>
+            <input  type="submit" id="sendButton" class="btn btn-primary" value="Send Message"></input>
+    @*        </form>*@
 </div>
 
 </html>

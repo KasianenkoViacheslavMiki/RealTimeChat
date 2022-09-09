@@ -6,16 +6,30 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddSignalR();
 builder.Services.AddDistributedMemoryCache();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<MessageRepository>();
+builder.Services.AddIdentity<User, IdentityRole>(option =>
+{
+    option.Password.RequireDigit = false;
+    option.Password.RequireUppercase = false;
+    option.Password.RequireLowercase = false;
+    option.Password.RequireNonAlphanumeric = false;
+    option.Password.RequiredLength = 6;
+}).AddEntityFrameworkStores<ChatDBContext>()
+.AddDefaultTokenProviders();
 
-// добавляем контекст ApplicationContext в качестве сервиса в приложение
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ApplicationContext пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 //builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer("Data Source=HOME-PC\\SQLEXPRESS;Initial Catalog=ChatDB;Integrated Security=True"));
 builder.Services.AddDbContext<ChatDBContext>(options =>
                 options.UseSqlServer("Data Source=HOME-PC\\SQLEXPRESS;Initial Catalog=ChatDB;Integrated Security=True"));
+
+
+
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromSeconds(10);
@@ -49,6 +63,6 @@ app.UseSession();
 app.UseAuthentication();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Chat}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 app.MapHub<ChatHub>("/chatHub");
 app.Run();

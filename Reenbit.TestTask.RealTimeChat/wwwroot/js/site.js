@@ -26,9 +26,9 @@ $(() => {
    
 
     document.getElementById("sendButton").addEventListener("click", function (event) {
-        var user = "Miki";
+        var user = '<%= Session["UserName"] %>'
         var message = document.getElementById("messageInput").value;
-        var idUser = 1;
+        var idUser = '<%= Session["UserId"] %>';
         var idRoom = 3;
         //var message = typeMessage();
         //message.TextMessage = document.getElementById("messageInput").value;

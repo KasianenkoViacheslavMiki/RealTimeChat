@@ -1,0 +1,22 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Account" asp-action="Register" id="registerForm"  method="post">
+            <h2>Створити нового користувача.</h2>
+            <hr />
+            <div class="form-floating">
+                <input type ="text" name="username" class="form-control" autocomplete="username" aria-required="true" />
+                <label>Імя користувача</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" name="password" class="form-control" autocomplete="password" aria-required="true" />
+                <label>Пароль</label>
+            </div>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Реєстрація</button>
+        </form>
+    </div>
+    
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

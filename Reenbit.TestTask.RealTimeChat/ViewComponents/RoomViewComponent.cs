@@ -19,7 +19,6 @@ namespace Reenbit.TestTask.RealTimeChat.ViewComponents
             ////var room = chatDBContext.Rooms.Join(chatDBContext.Participants,
             ////                                    c=>c.
             ////                                    )
-
             var room = from rooms in chatDBContext.Rooms
                        join c in chatDBContext.Participants on rooms.Id equals c.RoomId
                        where EF.Functions.Like(c.UserId,HttpContext.Session.GetString("UserId"))
