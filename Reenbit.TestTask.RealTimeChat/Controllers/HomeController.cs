@@ -8,6 +8,7 @@ using Reenbit.TestTask.RealTimeChat.Hubs;
 using Reenbit.TestTask.RealTimeChat.Models;
 //using Reenbit.TestTask.RealTimeChat.Models;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Reenbit.TestTask.RealTimeChat.Controllers
 {
@@ -47,7 +48,11 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         {
             return View(_dataRepository.GetChat(id));
         }
- 
+        [HttpGet]
+        //public async Task<IActionResult> JoinRoom(int id)
+        //{
+        //    await 
+        //}
         [HttpPost]
         public async Task<IActionResult> SendMessage(Message message)
         {
@@ -55,7 +60,7 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
             message.DateMessage = DateTime.Now;
             message.UserId = _dataRepository.GetUserId();
             var userName = _dataRepository.GetUserName();
-            await _hubContext.Clients.All.SendAsync("ReceiveMessage", message.Id, message.UserId, userName, message.TextMessage, message.DateMessage); //function (MessageId, MessagesUserID, UserName, MessageText, MessageDate)
+            await _hubContext.Clients.Groups(message.RoomId.ToString()).SendAsync("ReceiveMessage", message.Id, message.UserId, userName, message.TextMessage, message.DateMessage); //function (MessageId, MessagesUserID, UserName, MessageText, MessageDate)
             if (!ModelState.IsValid) return Ok();
             var result = _chatDBContext.Add(message);
             await _chatDBContext.SaveChangesAsync();
@@ -66,6 +71,7 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         {
             return Ok(_dataRepository.GetUserId());
         }
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

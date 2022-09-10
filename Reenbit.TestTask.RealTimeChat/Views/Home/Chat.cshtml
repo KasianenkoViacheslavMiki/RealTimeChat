@@ -7,7 +7,7 @@
 }
 
 <html>
-
+       <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <div style="width:75%">
     <div class="py-2 px-4 border-bottom d-none d-lg-block">
         <div class="d-flex align-items-center py-1">
@@ -64,14 +64,17 @@
     }
 
 </div>
-<script>document.querySelector('#chat').lastElementChild.scrollIntoView();</script>
-
 <div class="input-group flex-grow-0 py-3 px-4 border-top">
-  
+
             <input id="chatId" type="hidden" name="chatID" value="@Model.Id"/>
             <input  name="TextMessage" id="messageInput"type="text" class="form-control" placeholder="Напишіть своє повідомлення">
             <input  type="submit" id="sendButton" class="btn btn-primary" value="Відправити"></input>
- 
+
 </div>
 
+<script>
+
+
+</script>
+<script>document.querySelector('#chat').lastElementChild.scrollIntoView();</script>
 </html>
