@@ -7,7 +7,25 @@
 }
 
 <html>
-       <script src="~/js/signalr/dist/browser/signalr.js"></script>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Видалити</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Видалення повідомлення</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Відмінити</button>
+                <button type="button" class="btn btn-primary">Видалити для себе</button>
+                <button type="button" class="btn btn-primary">Видалити для всіх</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div style="width:75%">
     <div class="py-2 px-4 border-bottom d-none d-lg-block">
         <div class="d-flex align-items-center py-1">
@@ -86,6 +104,9 @@
         b.style="background: #d0d5db;";
     }
     </script>
+    <script>
+
+    </script>
     @foreach(var message in Model.Messages)
     {
      <div id= "message-@message.Id" value="@message.Id" class="content chat-message-left pb-4">
@@ -94,7 +115,7 @@
             <div class="hide d-flex  justify-content-end">
                         @if (message.UserId == @signInManager.Context.Session.GetString("UserId"))
                         {
-                            <input  type="button" class="button button-delete" aria-label="Видалити"   value=&#x2716; role="button" tabindex="0"></input>
+                             <input  type="button" class="button button-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" aria-label="Видалити"   value=&#x2716; role="button" tabindex="0"></input>
                             <input  type="button" onclick="BeginEdit(this)" class="button button-edit" aria-label="Редагувати" value="ED"     role="button" tabindex="0"></input>
                           
                         }
@@ -122,10 +143,7 @@
             <input  type="submit" id="sendButton" class="btn btn-primary" value="Відправити"></input>
 
 </div>
+<!-- Button trigger modal -->
 
-<script>
-
-
-</script>
 <script>document.querySelector('#chat').lastElementChild.scrollIntoView();</script>
 </html>
