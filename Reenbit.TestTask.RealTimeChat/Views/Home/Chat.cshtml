@@ -98,7 +98,9 @@
                             <input  type="button" onclick="BeginEdit(this)" class="button button-edit" aria-label="Редагувати" value="ED"     role="button" tabindex="0"></input>
                           
                         }
+                        @if (@Model.TypeRoom==true){
                             <input  type="button" class="button button-answer" aria-label="Відповисти" value=&#64;    role="button" tabindex="0"></input>
+                        }
             </div>
         </div>
         <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
