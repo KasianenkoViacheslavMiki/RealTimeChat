@@ -37,24 +37,31 @@
 <div id="chat" class="chat-messages p-4" style="overflow-y: scroll; height: 570px;" >
 
 
-    @foreach(var chat in Model.Messages)
+    @foreach(var message in Model.Messages)
     {
-     <div id= "chat=@chat.Id" class="content chat-message-left pb-4">
-        <input  runat="server" value="@chat.Id" type="hidden"></input>
+     <div id= "chat=@message.Id" value="@message.Id" class="content chat-message-left pb-4">
+        <input  runat="server" value="@message.Id" type="hidden"></input>
         <div class="hide buttons-container" role="group" aria-label="Дії з повідомленнями">
             <div class="d-flex  justify-content-end">
-                <input  type="button" class="button" aria-label="Видалити"   value=&#x2716; role="button" tabindex="0"></input>
-                <input  type="button" class="button" aria-label="Редагувати" value="ED"     role="button" tabindex="0"></input>
-                <input  type="button" class="button" aria-label="Відповисти" value=&#64;    role="button" tabindex="0"></input>
+                        @if (message.UserId == @signInManager.Context.Session.GetString("UserId"))
+                        {
+                            <input  type="button" class="button" aria-label="Видалити"   value=&#x2716; role="button" tabindex="0"></input>
+                            <input  type="button" class="button" aria-label="Редагувати" value="ED"     role="button" tabindex="0"></input>
+                            <input  type="button" class="button" aria-label="Відповисти" value=&#64;    role="button" tabindex="0"></input>
+                        }
+                        else 
+                        {
+                            <input  type="button" class="button" aria-label="Відповисти" value=&#64;    role="button" tabindex="0"></input>
+                        }
             </div>
         </div>
         <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-            <input  runat="server" value="@chat.UserId" type="hidden"></input> 
-            <div class="font-weight-bold fw-bold mb-1">@chat.User.UserName</div>
-                <div>@chat.TextMessage </div>
+            <input  runat="server" value="@message.UserId" type="hidden"></input> 
+            <div class="font-weight-bold fw-bold mb-1">@message.User.UserName</div>
+                <div>@message.TextMessage </div>
             </div>
             <div class="d-flex flex-row justify-content-end p-1">
-                <p>@chat.DateMessage</p>
+                <p>@message.DateMessage</p>
             </div>
      </div>
     }

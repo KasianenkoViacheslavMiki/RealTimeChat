@@ -54,11 +54,17 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
             message.Id = Guid.NewGuid().ToString();
             message.DateMessage = DateTime.Now;
             message.UserId = _dataRepository.GetUserId();
-           
+            var userName = _dataRepository.GetUserName();
+            await _hubContext.Clients.All.SendAsync("ReceiveMessage", message.Id, message.UserId, userName, message.TextMessage, message.DateMessage); //function (MessageId, MessagesUserID, UserName, MessageText, MessageDate)
             if (!ModelState.IsValid) return Ok();
             var result = _chatDBContext.Add(message);
             await _chatDBContext.SaveChangesAsync();
             return Ok(message);
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetUserId()
+        {
+            return Ok(_dataRepository.GetUserId());
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

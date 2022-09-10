@@ -21,5 +21,6 @@ namespace Reenbit.TestTask.RealTimeChat.Models
             return result;
         }
         public string GetUserId() => _signInManager.Context.Session.GetString("UserId");
+        public string GetUserName() => _signInManager.Context.Session.GetString("UserName");
     }
 }

@@ -7,12 +7,16 @@
 $(() => {
     var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
     document.getElementById("sendButton").disabled = true;
-
-    connection.on("LoadMessages", function (_roomId) {
-        LoadMessages(_roomId);
-    });
-    connection.on("ReceiveMessage", function (user, message, _idRoom, _idUser) {
-        AddMessages(user, message, _idRoom, _idUser);
+    connection.on("ReceiveMessage", function (MessageId, MessagesUserID, UserName, MessageText, MessageDate) {
+        $.ajax({
+            url: '/Home/GetUserId',
+            type: 'POST',
+            async: true
+            ,
+            success: (UserId) => {
+                OverWriteAddMessages(MessageId, MessagesUserID, UserName, MessageText, MessageDate,UserId)
+            }
+        })
     });
 
     
@@ -41,10 +45,6 @@ $(() => {
                 RoomId: idRoom
             },
             async: true
-            //,
-            //success: (result) => {
-            //    AddMessages(result.UserName, message, result.UserId, result.messageId);
-            //}
         });
         //connection.invoke("SendMessageServer", user, message/*, idRoom, idUser*/).catch(function (err) {
         //    return console.error(err.toString());

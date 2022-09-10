@@ -1,6 +1,89 @@
 ﻿
+function OverWriteAddMessages(MessageId, UserID, UserName, MessageText, MessageDate, SessionUserID) {
+    var container = document.createElement("div");
+    container.id = 'chat=' + MessageId;
+    container.value = MessageId;
+    container.className = 'content chat-message-left pb-4';
 
-function AddMessages(user, message,userId,messageId) {
+    var hiddenInput = document.createElement("input"); 
+    hiddenInput.value = MessageId;
+    hiddenInput.type = "hidden";
+
+    var containerButtons = document.createElement("div");
+    containerButtons.className = 'hide buttons-container';
+    containerButtons.ariaRoleDescription = "group";
+    containerButtons.ariaLabel = "Дії з повідомленнями";
+
+    var groupButtons = document.createElement("div");
+    groupButtons.className = "d-flex  justify-content-end";
+
+    if (SessionUserID == UserID) {
+        var deleteButton = document.createElement("input");
+        deleteButton.type = "button";
+        deleteButton.className = "button";
+        deleteButton.ariaLabel = "Видалити";
+        deleteButton.value = "✖";
+
+        var editButton = document.createElement("input");
+        editButton.type = "button";
+        editButton.className = "button";
+        editButton.ariaLabel = "Редагувати";
+        editButton.value = "ED";
+
+        var answerButton = document.createElement("input");
+        answerButton.type = "button";
+        answerButton.className = "button";
+        answerButton.ariaLabel = "Відповісти";
+        answerButton.value = "@";
+
+        groupButtons.appendChild(deleteButton);
+        groupButtons.appendChild(editButton);
+        groupButtons.appendChild(answerButton);
+        containerButtons.appendChild(groupButtons);
+    }
+    else {
+        var answerButton = document.createElement("input");
+        answerButton.type = "button";
+        answerButton.className = "button";
+        answerButton.ariaLabel = "Відповісти";
+        answerButton.value = "@";
+
+        groupButtons.appendChild(answerButton);
+        containerButtons.appendChild(groupButtons);
+    }
+
+    var divBlock = document.createElement("div");
+    divBlock.className = "flex-shrink-1 bg-light rounded py-2 px-3 ml-3";
+
+    var inputRoomId = document.createElement("input");
+    inputRoomId.value = UserID;
+    inputRoomId.type = "hidden";
+
+    var divName = document.createElement("div");
+    divName.className = "font-weight-bold mb-1 fw-bold";
+    divName.textContent = UserName;
+
+    var divText = document.createElement("div");
+    divText.textContent = MessageText;
+
+    var divDate = document.createElement("div");
+    divDate.className = "d-flex flex-row justify-content-end p-1";
+    divDate.textContent = MessageDate;
+
+    divBlock.appendChild(inputRoomId);
+    divBlock.appendChild(divName);
+    divBlock.appendChild(document.createElement("p"));
+    divBlock.appendChild(divText);
+
+    container.appendChild(containerButtons);
+    container.appendChild(divBlock);
+    container.appendChild(divDate);
+    document.querySelector('#chat').appendChild(container);
+    document.querySelector('#chat').lastElementChild.scrollIntoView();
+
+
+}
+function AddMessages(user, message, userId,messageId) {
     var date = new Date();
     var dateStr =
         ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
@@ -12,7 +95,6 @@ function AddMessages(user, message,userId,messageId) {
 
     var divMessage = document.createElement("div");
     divMessage.className = "content chat-message-left pb-4";
-
     var divButtonsContainer = document.createElement("div");
     divButtonsContainer.className = "hide buttons-container";
     divButtonsContainer.ariaRoleDescription = "group";
