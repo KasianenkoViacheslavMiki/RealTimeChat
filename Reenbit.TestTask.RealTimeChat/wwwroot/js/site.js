@@ -35,11 +35,12 @@ $(() => {
         //message.IdRoom = document.getElementById("idRoom").value;
         $.ajax({
             url: '/Home/SendMessage',
-            method: 'POST',
+            type: 'POST',
             data: {
                 TextMessage: message,
-                RoomId: idRoom,
-            }
+                RoomId: idRoom
+            },
+            async: true
             //,
             //success: (result) => {
             //    AddMessages(result.UserName, message, result.UserId, result.messageId);

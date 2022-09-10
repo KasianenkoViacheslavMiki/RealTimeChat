@@ -37,10 +37,6 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         {
             return View();
         }
-        public IActionResult Privacy()
-        {
-            return View();
-        }
         [HttpPost]
         public IActionResult GetMessagesRoomChat(int IdRoom)
         {
@@ -51,12 +47,15 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         {
             return View(_dataRepository.GetChat(id));
         }
+ 
         [HttpPost]
         public async Task<IActionResult> SendMessage(Message message)
         {
+            message.Id = Guid.NewGuid().ToString();
             message.DateMessage = DateTime.Now;
             message.UserId = _dataRepository.GetUserId();
-            if (!ModelState.IsValid) return View();
+           
+            if (!ModelState.IsValid) return Ok();
             var result = _chatDBContext.Add(message);
             await _chatDBContext.SaveChangesAsync();
             return Ok(message);

@@ -16,7 +16,7 @@ namespace Reenbit.TestTask.RealTimeChat.Models
         }
         public Room GetChat(int roomId)
         {
-            var result = _context.Rooms.Include(x => x.Messages).ThenInclude(x => x.User).Include(x => x.Participants).ThenInclude(x => x.User).FirstOrDefault(x => x.Id == roomId);
+            var result = _context.Rooms.Include(x => x.Messages.OrderBy(x=>x.DateMessage)).ThenInclude(x => x.User).Include(x => x.Participants).ThenInclude(x => x.User).FirstOrDefault(x => x.Id == roomId);
             if (result == null) return new Room();
             return result;
         }
