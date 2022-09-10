@@ -77,5 +77,16 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EditMessage(Message message)
+        {
+            var updateMessage = _chatDBContext.Messages.FirstOrDefault(x => x.Id == message.Id);
+            updateMessage.TextMessage=message.TextMessage;
+            _chatDBContext.Update(updateMessage);
+            await _chatDBContext.SaveChangesAsync();
+            await _hubContext.Clients.Groups(updateMessage.RoomId.ToString()).SendAsync("EditMessage",message.Id,message.TextMessage);
+            return Ok(message); 
+        }
     }
 }

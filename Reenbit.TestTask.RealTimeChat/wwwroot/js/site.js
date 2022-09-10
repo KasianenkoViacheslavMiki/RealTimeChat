@@ -13,6 +13,9 @@ connection.on("ReceiveMessage", function (MessageId, MessagesUserID, UserName, M
         }
     })
 });
+connection.on("EditMessage", function (MessageId,MessageText) {
+    EditMessange(MessageId, MessageText)
+});
 
 connection.start().then(function () {
     document.getElementById("sendButton").disabled = false;
@@ -40,4 +43,4 @@ document.getElementById("sendButton").addEventListener("click", function (event)
             async: true
         });
         event.preventDefault();
-    });
+});

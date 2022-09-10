@@ -33,31 +33,80 @@
 
 <div id="chat" class="chat-messages p-4" style="overflow-y: scroll; height: 570px;" >
 
+    
+    <script>
+        function EndEdit(element) {
+            var containerChat = $(element).closest(".chat-message-left");
+            console.log(containerChat[0]);
+            var containerButton = containerChat[0].getElementsByClassName("buttons-container")[0];
+            console.log(containerButton);
+            containerButton.style = "";
 
+            var a = $(containerChat).attr("value");
+            var b = document.getElementById("text-messege-"+a);
+            console.log(b);
+            var textMessage = b.textContent;
+            var id = a;
+            var idRoom = document.getElementById('chatId').textContent;
+
+            b.contentEditable=false;
+            b.style="";
+            element.remove();
+
+            $.ajax({
+            url: '/Home/EditMessage',
+            type: 'POST',
+            data: {
+                TextMessage: textMessage,
+                Id: id,
+                RoomId:idRoom
+            },
+            async: true
+        });
+    }
+    </script>
+    <script>
+        function BeginEdit(element) {
+
+        var container = $(element).closest(".buttons-container");
+
+        container[0].style = "display:none;";
+        var a = $(element).closest(".content").attr("value");
+        var b = document.getElementById("text-messege-"+a);
+
+        var insertParent = document.getElementById("date-message-"+a).parentNode;
+        var date = document.getElementById("date-message-"+a);
+        var buttonSend = document.createElement("input");
+
+        insertParent.insertBefore(buttonSend,date);
+        buttonSend.setAttribute('value','Зберегти редакцію');
+        buttonSend.type="button";
+        buttonSend.setAttribute("onclick","EndEdit(this)");
+        b.contentEditable=true;
+        b.style="background: #d0d5db;";
+    }
+    </script>
     @foreach(var message in Model.Messages)
     {
-     <div id= "chat=@message.Id" value="@message.Id" class="content chat-message-left pb-4">
+     <div id= "message-@message.Id" value="@message.Id" class="content chat-message-left pb-4">
         <input  runat="server" value="@message.Id" type="hidden"></input>
-        <div class="hide buttons-container" role="group" aria-label="Дії з повідомленнями">
-            <div class="d-flex  justify-content-end">
+        <div class="buttons-container" role="group" aria-label="Дії з повідомленнями">
+            <div class="hide d-flex  justify-content-end">
                         @if (message.UserId == @signInManager.Context.Session.GetString("UserId"))
                         {
-                            <input  type="button" class="button" aria-label="Видалити"   value=&#x2716; role="button" tabindex="0"></input>
-                            <input  type="button" class="button" aria-label="Редагувати" value="ED"     role="button" tabindex="0"></input>
-                            <input  type="button" class="button" aria-label="Відповисти" value=&#64;    role="button" tabindex="0"></input>
+                            <input  type="button" class="button button-delete" aria-label="Видалити"   value=&#x2716; role="button" tabindex="0"></input>
+                            <input  type="button" onclick="BeginEdit(this)" class="button button-edit" aria-label="Редагувати" value="ED"     role="button" tabindex="0"></input>
+                          
                         }
-                        else 
-                        {
-                            <input  type="button" class="button" aria-label="Відповисти" value=&#64;    role="button" tabindex="0"></input>
-                        }
+                            <input  type="button" class="button button-answer" aria-label="Відповисти" value=&#64;    role="button" tabindex="0"></input>
             </div>
         </div>
         <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
             <input  runat="server" value="@message.UserId" type="hidden"></input> 
             <div class="font-weight-bold fw-bold mb-1">@message.User.UserName</div>
-                <div>@message.TextMessage </div>
+                    <div id ="text-messege-@message.Id" value="@message.Id">@message.TextMessage </div>
             </div>
-            <div class="d-flex flex-row justify-content-end p-1">
+            <div id="date-message-@message.Id" class="d-flex flex-row justify-content-end p-1">
                 <p>@message.DateMessage</p>
             </div>
      </div>

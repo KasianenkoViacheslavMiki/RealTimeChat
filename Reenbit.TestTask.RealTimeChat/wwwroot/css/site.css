@@ -20,7 +20,8 @@ body {
     visibility: hidden;
 }
 
-.content:hover .hide {
+.content:hover 
+.hide {
     visibility: visible;
 }
 

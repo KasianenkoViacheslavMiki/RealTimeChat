@@ -124,6 +124,12 @@ function LoadMessages(_idRoom) {
     });
 
 }
+
+function EditMessange(MessageId, MessageText) {
+    var editMessage = document.getElementById("text-messege-" + MessageId);
+    editMessage.textContent = MessageText;
+}
+
 function typeMessage() {
     var typeMessage = Object.create({},
         {
