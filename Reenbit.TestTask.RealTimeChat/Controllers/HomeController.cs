@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
@@ -10,19 +11,25 @@ using System.Diagnostics;
 
 namespace Reenbit.TestTask.RealTimeChat.Controllers
 {
-    
+    [Authorize]
     public class HomeController : Controller
     {
+        
         private readonly ILogger<HomeController> _logger;
         private readonly ChatDBContext _chatDBContext;
-        private readonly MessageRepository _messageRepository;
+        private readonly DataRepository _dataRepository;
         private readonly IHubContext<ChatHub> _hubContext;
-
-        public HomeController(ILogger<HomeController> logger,MessageRepository messageRepository, IHubContext<ChatHub> hubContext, ChatDBContext context)
+        
+        public HomeController(
+            ILogger<HomeController> logger,
+            DataRepository messageRepository,
+            IHubContext<ChatHub> hubContext,
+            ChatDBContext context
+            )
         {
             
             _logger = logger;
-            _messageRepository = messageRepository;
+            _dataRepository = messageRepository;
             _hubContext = hubContext;
             _chatDBContext = context;
         }
@@ -37,21 +44,20 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         [HttpPost]
         public IActionResult GetMessagesRoomChat(int IdRoom)
         {
-            var model =  _messageRepository.GetChat(IdRoom);
-            return Ok(model);
+            return Ok(_dataRepository.GetChat(IdRoom));
         }
         [HttpGet("{Id}")]
         public IActionResult Chat(int id)
         {
-            return View(_messageRepository.GetChat(id));
+            return View(_dataRepository.GetChat(id));
         }
         [HttpPost]
         public async Task<IActionResult> SendMessage(Message message)
         {
             message.DateMessage = DateTime.Now;
-            message.UserId = HttpContext.Session.GetString("UserId");
+            message.UserId = _dataRepository.GetUserId();
             if (!ModelState.IsValid) return View();
-            _chatDBContext.Add(message);
+            var result = _chatDBContext.Add(message);
             await _chatDBContext.SaveChangesAsync();
             return Ok(message);
         }

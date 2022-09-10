@@ -11,7 +11,7 @@ builder.Services.AddSignalR();
 builder.Services.AddDistributedMemoryCache();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddTransient<MessageRepository>();
+builder.Services.AddTransient<DataRepository>();
 builder.Services.AddIdentity<User, IdentityRole>(option =>
 {
     option.Password.RequireDigit = false;
@@ -32,7 +32,6 @@ builder.Services.AddDbContext<ChatDBContext>(options =>
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
 
 });
 builder.Services.AddHttpContextAccessor();
@@ -57,10 +56,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
-app.UseAuthentication();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");

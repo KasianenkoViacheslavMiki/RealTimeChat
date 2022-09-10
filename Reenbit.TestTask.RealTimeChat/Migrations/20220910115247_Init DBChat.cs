@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Reenbit.TestTask.RealTimeChat.Migrations
 {
-    public partial class AddCompanyMigration : Migration
+    public partial class InitDBChat : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -49,17 +49,17 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Rooms",
+                name: "Room",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoomName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RoomName = table.Column<string>(type: "nchar(10)", fixedLength: true, maxLength: 10, nullable: true),
                     TypeRoom = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Rooms", x => x.Id);
+                    table.PrimaryKey("PK_Room", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -169,54 +169,51 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Messages",
+                name: "Message",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TextMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateMessage = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: true),
-                    RoomId = table.Column<int>(type: "int", nullable: true),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TextMessage = table.Column<string>(type: "text", nullable: true),
+                    DateMessage = table.Column<DateTime>(type: "datetime", nullable: true),
+                    userId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    roomId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.PrimaryKey("PK_Message", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Messages_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "AspNetUsers",
+                        name: "FK_Message_Room",
+                        column: x => x.roomId,
+                        principalTable: "Room",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Messages_Rooms_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Rooms",
+                        name: "FK_Message_User",
+                        column: x => x.userId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Participants",
+                name: "Participant",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: true),
-                    RoomId = table.Column<int>(type: "int", nullable: true),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    userId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    roomId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Participants", x => x.Id);
+                    table.PrimaryKey("PK_Participant", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Participants_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "AspNetUsers",
+                        name: "FK_Participants_Room",
+                        column: x => x.roomId,
+                        principalTable: "Room",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Participants_Rooms_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Rooms",
+                        name: "FK_Participants_User",
+                        column: x => x.userId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
 
@@ -260,24 +257,24 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_RoomId",
-                table: "Messages",
-                column: "RoomId");
+                name: "IX_Message_roomId",
+                table: "Message",
+                column: "roomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_UserId1",
-                table: "Messages",
-                column: "UserId1");
+                name: "IX_Message_userId",
+                table: "Message",
+                column: "userId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Participants_RoomId",
-                table: "Participants",
-                column: "RoomId");
+                name: "IX_Participant_roomId",
+                table: "Participant",
+                column: "roomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Participants_UserId1",
-                table: "Participants",
-                column: "UserId1");
+                name: "IX_Participant_userId",
+                table: "Participant",
+                column: "userId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -298,19 +295,19 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Messages");
+                name: "Message");
 
             migrationBuilder.DropTable(
-                name: "Participants");
+                name: "Participant");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Room");
 
             migrationBuilder.DropTable(
-                name: "Rooms");
+                name: "AspNetUsers");
         }
     }
 }

@@ -12,8 +12,8 @@ using Reenbit.TestTask.RealTimeChat.Models;
 namespace Reenbit.TestTask.RealTimeChat.Migrations
 {
     [DbContext(typeof(ChatDBContext))]
-    [Migration("20220909175336_AddCompanyMigration")]
-    partial class AddCompanyMigration
+    [Migration("20220910115247_Init DBChat")]
+    partial class InitDBChat
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -159,34 +159,30 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
 
             modelBuilder.Entity("Reenbit.TestTask.RealTimeChat.Models.Message", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("DateMessage")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<int?>("RoomId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("roomId");
 
                     b.Property<string>("TextMessage")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("userId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RoomId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Message", (string)null);
                 });
 
             modelBuilder.Entity("Reenbit.TestTask.RealTimeChat.Models.Participant", b =>
@@ -198,21 +194,20 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("RoomId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("roomId");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("userId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RoomId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("Participants");
+                    b.ToTable("Participant", (string)null);
                 });
 
             modelBuilder.Entity("Reenbit.TestTask.RealTimeChat.Models.Room", b =>
@@ -224,14 +219,16 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("RoomName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nchar(10)")
+                        .IsFixedLength();
 
                     b.Property<bool?>("TypeRoom")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Room", (string)null);
                 });
 
             modelBuilder.Entity("Reenbit.TestTask.RealTimeChat.Models.User", b =>
@@ -354,11 +351,13 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
                 {
                     b.HasOne("Reenbit.TestTask.RealTimeChat.Models.Room", "Room")
                         .WithMany("Messages")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .HasConstraintName("FK_Message_Room");
 
                     b.HasOne("Reenbit.TestTask.RealTimeChat.Models.User", "User")
                         .WithMany("Messages")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_Message_User");
 
                     b.Navigation("Room");
 
@@ -369,11 +368,13 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
                 {
                     b.HasOne("Reenbit.TestTask.RealTimeChat.Models.Room", "Room")
                         .WithMany("Participants")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .HasConstraintName("FK_Participants_Room");
 
                     b.HasOne("Reenbit.TestTask.RealTimeChat.Models.User", "User")
                         .WithMany("Participants")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_Participants_User");
 
                     b.Navigation("Room");
 

@@ -18,14 +18,16 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
-            HttpContext.Session.SetString("UserName", username);
+            
             var user = await _userManager.FindByNameAsync(username);
-            HttpContext.Session.SetString("UserId", user.Id);
             if (user != null) { 
             var result =  await _signInManager.PasswordSignInAsync(user, password,false,false);
             if (result.Succeeded)
             {
-                return RedirectToAction("Index","Home");
+                    await _signInManager.SignInAsync(user, false);
+                    _signInManager.Context.Session.SetString("UserName", username);
+                    _signInManager.Context.Session.SetString("UserId", user.Id);
+                    return RedirectToAction("Index","Home");
             }
             }
             return RedirectToAction("Login","Account");
@@ -42,7 +44,7 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(newUser, false);
-                return RedirectToAction("Chat", "Home");
+                return RedirectToAction("Index", "Home");
             }
             return RedirectToAction("Register", "Account");
         }

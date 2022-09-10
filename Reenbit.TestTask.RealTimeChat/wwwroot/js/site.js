@@ -26,27 +26,28 @@ $(() => {
    
 
     document.getElementById("sendButton").addEventListener("click", function (event) {
-        var user = '<%= Session["UserName"] %>'
         var message = document.getElementById("messageInput").value;
-        var idUser = '<%= Session["UserId"] %>';
-        var idRoom = 3;
+        var idRoom = document.getElementById("chatId").value;
         //var message = typeMessage();
         //message.TextMessage = document.getElementById("messageInput").value;
         //message.UserName = "Miki";
         //message.IdUser = 1;
         //message.IdRoom = document.getElementById("idRoom").value;
         $.ajax({
-                url: '/Home/SendMessage',
-                method: 'POST',
-                data: {
-                    TextMessage: message,
-                    UserId: idUser,
-                    RoomId: idRoom,
-                }
-        })
-        connection.invoke("SendMessageServer", user, message, idRoom, idUser).catch(function (err) {
-            return console.error(err.toString());
+            url: '/Home/SendMessage',
+            method: 'POST',
+            data: {
+                TextMessage: message,
+                RoomId: idRoom,
+            }
+            //,
+            //success: (result) => {
+            //    AddMessages(result.UserName, message, result.UserId, result.messageId);
+            //}
         });
+        //connection.invoke("SendMessageServer", user, message/*, idRoom, idUser*/).catch(function (err) {
+        //    return console.error(err.toString());
+        //});
         event.preventDefault();
     });
 })

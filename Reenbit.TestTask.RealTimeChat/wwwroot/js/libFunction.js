@@ -1,6 +1,6 @@
 ﻿
 
-function AddMessages(user, message, _idRoom, _idUser) {
+function AddMessages(user, message,userId,messageId) {
     var date = new Date();
     var dateStr =
         ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
