@@ -125,9 +125,13 @@ function LoadMessages(_idRoom) {
 
 }
 
-function EditMessange(MessageId, MessageText) {
+function EditMessage(MessageId, MessageText) {
     var editMessage = document.getElementById("text-messege-" + MessageId);
     editMessage.textContent = MessageText;
+}
+
+function deleteMessage(MessageId) {
+    document.getElementById("message-" + MessageId).remove();
 }
 
 function typeMessage() {

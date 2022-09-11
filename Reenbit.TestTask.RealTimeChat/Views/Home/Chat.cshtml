@@ -5,9 +5,51 @@
     ViewData["Title"] = "Chat";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script>
+    function hideModal (){
+    $('#deleteModal').modal('hide')
+    }
+    function sendInModalMessageID(element){
+        var containerChat = $(element).closest(".content");
+            var id = $(containerChat).attr("value");
+            document.getElementById("delete-message-id").value=id;
+    }
+    function getMessageId(){
+            return document.getElementById("delete-message-id").value;;
+    }
+
+    function deleteForUser(element){
+            var id = getMessageId();
+            deleteMessage(id);
+            $.ajax({
+            url: '/Home/DeleteForUser',
+            type: 'POST',
+            data: {
+                Id: id
+            },
+            async: true
+            });
+            hideModal();
+    }
+    function deleteForAll(element){
+            var id = getMessageId(element);
+            deleteMessage(id);
+            $.ajax({
+            url: '/Home/DeleteForAll',
+            type: 'POST',
+            data: {
+                Id: id
+            },
+            async: true
+            });
+            hideModal();
+    }
+</script>
+
 
 <html>
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModallabel" aria-hidden="true">
+    <input type="hidden" id="delete-message-id"></input>
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
@@ -18,9 +60,9 @@
                 <p>Видалення повідомлення</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Відмінити</button>
-                <button type="button" class="btn btn-primary">Видалити для себе</button>
-                <button type="button" class="btn btn-primary">Видалити для всіх</button>
+                <button  type="button" class="btn btn-secondary" data-bs-dismiss="modal">Відмінити</button>
+                <button onclick = "deleteForUser(this)" type="button" class="btn btn-primary">Видалити для себе</button>
+                <button onclick = "deleteForAll(this)" type="button" class="btn btn-primary">Видалити для всіх</button>
             </div>
         </div>
     </div>
@@ -54,7 +96,7 @@
     
     <script>
         function EndEdit(element) {
-            var containerChat = $(element).closest(".chat-message-left");
+            var containerChat = $(element).closest(".content");
             console.log(containerChat[0]);
             var containerButton = containerChat[0].getElementsByClassName("buttons-container")[0];
             console.log(containerButton);
@@ -109,13 +151,16 @@
     </script>
     @foreach(var message in Model.Messages)
     {
+    if (!(message.UserId == @signInManager.Context.Session.GetString("UserId") && message.DeleteForUser==true)) 
+    {
+
      <div id= "message-@message.Id" value="@message.Id" class="content chat-message-left pb-4">
         <input  runat="server" value="@message.Id" type="hidden"></input>
         <div class="buttons-container" role="group" aria-label="Дії з повідомленнями">
             <div class="hide d-flex  justify-content-end">
                         @if (message.UserId == @signInManager.Context.Session.GetString("UserId"))
                         {
-                             <input  type="button" class="button button-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" aria-label="Видалити"   value=&#x2716; role="button" tabindex="0"></input>
+                             <input onclick="sendInModalMessageID(this)"  type="button" class="button button-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" aria-label="Видалити"   value=&#x2716; role="button" tabindex="0"></input>
                             <input  type="button" onclick="BeginEdit(this)" class="button button-edit" aria-label="Редагувати" value="ED"     role="button" tabindex="0"></input>
                           
                         }
@@ -133,14 +178,18 @@
                 <p>@message.DateMessage</p>
             </div>
      </div>
-    }
+    
+        }
+        }
 
 </div>
 <div class="input-group flex-grow-0 py-3 px-4 border-top">
-
+    <form class="input-group flex-grow-0 py-3 px-4 border-top" >   
             <input id="chatId" type="hidden" name="chatID" value="@Model.Id"/>
             <input  name="TextMessage" id="messageInput"type="text" class="form-control" placeholder="Напишіть своє повідомлення">
             <input  type="submit" id="sendButton" class="btn btn-primary" value="Відправити"></input>
+    </form>
+
 
 </div>
 <!-- Button trigger modal -->

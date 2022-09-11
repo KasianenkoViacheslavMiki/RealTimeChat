@@ -57,6 +57,7 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         public async Task<IActionResult> SendMessage(Message message)
         {
             message.Id = Guid.NewGuid().ToString();
+            message.DeleteForUser = false;
             message.DateMessage = DateTime.Now;
             message.UserId = _dataRepository.GetUserId();
             var userName = _dataRepository.GetUserName();
@@ -87,6 +88,24 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
             await _chatDBContext.SaveChangesAsync();
             await _hubContext.Clients.Groups(updateMessage.RoomId.ToString()).SendAsync("EditMessage",message.Id,message.TextMessage);
             return Ok(message); 
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteForUser(Message message)
+        {
+            var updateMessage = _chatDBContext.Messages.FirstOrDefault(x => x.Id == message.Id);
+            updateMessage.DeleteForUser = true;
+            _chatDBContext.Update(updateMessage);
+            await _chatDBContext.SaveChangesAsync();
+            return Ok();
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteForAll(Message message)
+        {
+            var deleteMessage = _chatDBContext.Messages.FirstOrDefault(x => x.Id == message.Id);
+            await _hubContext.Clients.Groups(deleteMessage.RoomId.ToString()).SendAsync("EditMessage", message.Id, message.TextMessage);
+            _chatDBContext.Messages.Remove(deleteMessage);
+            await _chatDBContext.SaveChangesAsync();
+            return Ok();
         }
     }
 }

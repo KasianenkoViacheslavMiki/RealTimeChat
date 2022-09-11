@@ -14,7 +14,10 @@ connection.on("ReceiveMessage", function (MessageId, MessagesUserID, UserName, M
     })
 });
 connection.on("EditMessage", function (MessageId,MessageText) {
-    EditMessange(MessageId, MessageText)
+    EditMessage(MessageId, MessageText);
+});
+connection.on("DeleteMessage", function (MessageId) {
+    deleteMessage(MessageId);
 });
 
 connection.start().then(function () {
@@ -32,6 +35,7 @@ window.addEventListener('onunload', function () {
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
         var message = document.getElementById("messageInput").value;
+        document.getElementById('messageInput').value = "";
         var idRoom = document.getElementById("chatId").value;
         $.ajax({
             url: '/Home/SendMessage',
