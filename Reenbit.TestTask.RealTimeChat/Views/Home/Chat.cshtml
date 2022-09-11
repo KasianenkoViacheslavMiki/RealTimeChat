@@ -12,7 +12,8 @@
     function sendInModalMessageID(element){
         var containerChat = $(element).closest(".content");
             var id = $(containerChat).attr("value");
-            document.getElementById("delete-message-id").value=id;
+            console.log(id);
+            document.getElementById("delete-message-id").setAttribute("value",id);
     }
     function getMessageId(){
             return document.getElementById("delete-message-id").value;;
@@ -69,6 +70,7 @@
 </div>
 
 <div style="width:75%">
+    <input value="@Model.TypeRoom.ToString()" id="typeRoom"type="hidden"></input>
     <div class="py-2 px-4 border-bottom d-none d-lg-block">
         <div class="d-flex align-items-center py-1">
             <div class="flex-grow-1 pl-3">
@@ -164,7 +166,8 @@
                             <input  type="button" onclick="BeginEdit(this)" class="button button-edit" aria-label="Редагувати" value="ED"     role="button" tabindex="0"></input>
                           
                         }
-                        @if (@Model.TypeRoom==true){
+                            @if (@Model.TypeRoom == true && message.UserId != @signInManager.Context.Session.GetString("UserId"))
+                            {
                             <input  type="button" class="button button-answer" aria-label="Відповисти" value=&#64;    role="button" tabindex="0"></input>
                         }
             </div>

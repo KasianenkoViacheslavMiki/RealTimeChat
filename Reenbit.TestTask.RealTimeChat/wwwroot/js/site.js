@@ -2,7 +2,7 @@
 var roomID = document.getElementById("chatId").value;
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 document.getElementById("sendButton").disabled = true;
-connection.on("ReceiveMessage", function (MessageId, MessagesUserID, UserName, MessageText, MessageDate) {
+connection.on("ReceiveMessage", function (MessageId, MessagesUserID, UserName, MessageText, MessageDate, RoomId) {
     $.ajax({
         url: '/Home/GetUserId',
         type: 'POST',

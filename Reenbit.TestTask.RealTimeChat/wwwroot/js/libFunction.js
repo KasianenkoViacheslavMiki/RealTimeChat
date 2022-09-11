@@ -1,5 +1,4 @@
-﻿
-function OverWriteAddMessages(MessageId, UserID, UserName, MessageText, MessageDate, SessionUserID) {
+﻿function OverWriteAddMessages(MessageId, UserID, UserName, MessageText, MessageDate, SessionUserID, RoomID) {
     var date = new Date();
     var dateStr =
         ("00" + date.getDate()).slice(-2) + "." +
@@ -8,10 +7,9 @@ function OverWriteAddMessages(MessageId, UserID, UserName, MessageText, MessageD
         ("00" + date.getHours()).slice(-2) + ":" +
         ("00" + date.getMinutes()).slice(-2) + ":" +
         ("00" + date.getSeconds()).slice(-2);
-
     var container = document.createElement("div");
-    container.id = 'chat=' + MessageId;
-    container.value = MessageId;
+    container.id = 'message-' + MessageId;
+    container.setAttribute("value", MessageId);
     container.className = 'content chat-message-left pb-4';
 
     var hiddenInput = document.createElement("input"); 
@@ -32,25 +30,23 @@ function OverWriteAddMessages(MessageId, UserID, UserName, MessageText, MessageD
         deleteButton.className = "button";
         deleteButton.ariaLabel = "Видалити";
         deleteButton.value = "✖";
+        deleteButton.setAttribute("onclick","sendInModalMessageID(this)");
+        deleteButton.setAttribute("data-bs-toggle", "modal");
+        deleteButton.setAttribute("data-bs-target", "#deleteModal");
 
         var editButton = document.createElement("input");
         editButton.type = "button";
         editButton.className = "button";
         editButton.ariaLabel = "Редагувати";
         editButton.value = "ED";
-
-        var answerButton = document.createElement("input");
-        answerButton.type = "button";
-        answerButton.className = "button";
-        answerButton.ariaLabel = "Відповісти";
-        answerButton.value = "@";
+        editButton.setAttribute("onclick", "BeginEdit(this)");
 
         groupButtons.appendChild(deleteButton);
         groupButtons.appendChild(editButton);
-        groupButtons.appendChild(answerButton);
+
         containerButtons.appendChild(groupButtons);
     }
-    else {
+    else if (SessionUserID != UserID && document.getElementById("typeRoom").value=="True") {
         var answerButton = document.createElement("input");
         answerButton.type = "button";
         answerButton.className = "button";
@@ -65,7 +61,7 @@ function OverWriteAddMessages(MessageId, UserID, UserName, MessageText, MessageD
     divBlock.className = "flex-shrink-1 bg-light rounded py-2 px-3 ml-3";
 
     var inputRoomId = document.createElement("input");
-    inputRoomId.value = UserID;
+    inputRoomId.value = RoomID;
     inputRoomId.type = "hidden";
 
     var divName = document.createElement("div");
@@ -74,10 +70,13 @@ function OverWriteAddMessages(MessageId, UserID, UserName, MessageText, MessageD
 
     var divText = document.createElement("div");
     divText.textContent = MessageText;
+    divText.id = "text-messege-" + MessageId;
+    divText.setAttribute("values", MessageId);;
 
     var divDate = document.createElement("div");
     divDate.className = "d-flex flex-row justify-content-end p-1";
     divDate.textContent = dateStr;
+    divDate.id = "date-message-" + MessageId;
         //MessageDate;
 
     divBlock.appendChild(inputRoomId);
