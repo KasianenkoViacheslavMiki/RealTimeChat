@@ -173,7 +173,7 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TextMessage = table.Column<string>(type: "text", nullable: true),
+                    TextMessage = table.Column<string>(type: "nvarchar(500)", nullable: true),
                     DateMessage = table.Column<DateTime>(type: "datetime", nullable: true),
                     userId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     roomId = table.Column<int>(type: "int", nullable: true),

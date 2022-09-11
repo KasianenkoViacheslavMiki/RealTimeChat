@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<Room> 
-
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> signInManager
 @foreach(var chat in Model){
                              <a  class="list-group-item list-group-item-action border-0" asp-controller="Home" asp-action="Chat" asp-route-id="@chat.Id">
                             <div class="d-flex align-items-start">
@@ -7,12 +8,20 @@
                                 @if (@chat.TypeRoom == false)
                                 {
                                     <div>Приватний чат:</div>
+                    @foreach (var User in chat.Participants)
+                    {
+                        @if (@signInManager.Context.Session.GetString("UserId") != @User.UserId)
+                        {
+                            @User.User.UserName
+                        }   
+                    }
                                 } 
                                 else 
                                 { 
                                     <div>Група:</div>
+                                    @chat.RoomName;
                                 }
-                                @chat.RoomName
+                                
                                 </div>
                             </div>
                          </a>

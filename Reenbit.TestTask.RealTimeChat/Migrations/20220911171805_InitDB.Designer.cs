@@ -12,7 +12,7 @@ using Reenbit.TestTask.RealTimeChat.Models;
 namespace Reenbit.TestTask.RealTimeChat.Migrations
 {
     [DbContext(typeof(ChatDBContext))]
-    [Migration("20220911163011_InitDB")]
+    [Migration("20220911171805_InitDB")]
     partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -173,7 +173,7 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
                         .HasColumnName("roomId");
 
                     b.Property<string>("TextMessage")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)")

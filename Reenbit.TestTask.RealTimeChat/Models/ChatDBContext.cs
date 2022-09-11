@@ -42,7 +42,7 @@ namespace Reenbit.TestTask.RealTimeChat.Models
 
                 entity.Property(e => e.RoomId).HasColumnName("roomId");
 
-                entity.Property(e => e.TextMessage).HasColumnType("text");
+                entity.Property(e => e.TextMessage).HasColumnType("nvarchar(500)");
 
                 entity.Property(e => e.UserId).HasColumnName("userId");
 

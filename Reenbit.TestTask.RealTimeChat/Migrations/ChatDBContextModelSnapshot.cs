@@ -171,7 +171,7 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
                         .HasColumnName("roomId");
 
                     b.Property<string>("TextMessage")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)")
