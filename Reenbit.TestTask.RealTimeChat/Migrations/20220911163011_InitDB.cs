@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Reenbit.TestTask.RealTimeChat.Migrations
 {
-    public partial class InitDBChat : Migration
+    public partial class InitDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -176,7 +176,8 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
                     TextMessage = table.Column<string>(type: "text", nullable: true),
                     DateMessage = table.Column<DateTime>(type: "datetime", nullable: true),
                     userId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    roomId = table.Column<int>(type: "int", nullable: true)
+                    roomId = table.Column<int>(type: "int", nullable: true),
+                    DeleteForUser = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {

@@ -12,8 +12,8 @@ using Reenbit.TestTask.RealTimeChat.Models;
 namespace Reenbit.TestTask.RealTimeChat.Migrations
 {
     [DbContext(typeof(ChatDBContext))]
-    [Migration("20220910115247_Init DBChat")]
-    partial class InitDBChat
+    [Migration("20220911163011_InitDB")]
+    partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -164,6 +164,9 @@ namespace Reenbit.TestTask.RealTimeChat.Migrations
 
                     b.Property<DateTime?>("DateMessage")
                         .HasColumnType("datetime");
+
+                    b.Property<bool?>("DeleteForUser")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("RoomId")
                         .HasColumnType("int")

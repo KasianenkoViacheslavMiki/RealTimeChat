@@ -25,7 +25,7 @@ builder.Services.AddIdentity<User, IdentityRole>(option =>
 // ��������� �������� ApplicationContext � �������� ������� � ����������
 //builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer("Data Source=HOME-PC\\SQLEXPRESS;Initial Catalog=ChatDB;Integrated Security=True"));
 builder.Services.AddDbContext<ChatDBContext>(options =>
-                options.UseSqlServer("Data Source=HOME-PC\\SQLEXPRESS;Initial Catalog=ChatDB;Integrated Security=True"));
+                options.UseSqlServer("Server=tcp:mikidb.database.windows.net,1433;Initial Catalog=ChatDB;Persist Security Info=False;User ID=Miki;Password=Qaqa10qa;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"));
 
 
 
