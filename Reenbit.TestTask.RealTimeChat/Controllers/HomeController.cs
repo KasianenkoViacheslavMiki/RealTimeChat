@@ -96,16 +96,16 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
             updateMessage.DeleteForUser = true;
             _chatDBContext.Update(updateMessage);
             await _chatDBContext.SaveChangesAsync();
-            return Ok();
+            return Ok(message);
         }
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> DeleteForAll(Message message)
         {
             var deleteMessage = _chatDBContext.Messages.FirstOrDefault(x => x.Id == message.Id);
             await _hubContext.Clients.Groups(deleteMessage.RoomId.ToString()).SendAsync("EditMessage", message.Id, message.TextMessage);
             _chatDBContext.Messages.Remove(deleteMessage);
             await _chatDBContext.SaveChangesAsync();
-            return Ok();
+            return Ok(message);
         }
     }
 }
