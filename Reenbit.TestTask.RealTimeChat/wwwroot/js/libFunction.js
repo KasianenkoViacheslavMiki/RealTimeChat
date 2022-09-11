@@ -1,5 +1,14 @@
 ﻿
 function OverWriteAddMessages(MessageId, UserID, UserName, MessageText, MessageDate, SessionUserID) {
+    var date = new Date();
+    var dateStr =
+        ("00" + date.getDate()).slice(-2) + "." +
+        ("00" + (date.getMonth() + 1)).slice(-2) + "." +
+        date.getFullYear() + " " +
+        ("00" + date.getHours()).slice(-2) + ":" +
+        ("00" + date.getMinutes()).slice(-2) + ":" +
+        ("00" + date.getSeconds()).slice(-2);
+
     var container = document.createElement("div");
     container.id = 'chat=' + MessageId;
     container.value = MessageId;
@@ -68,7 +77,8 @@ function OverWriteAddMessages(MessageId, UserID, UserName, MessageText, MessageD
 
     var divDate = document.createElement("div");
     divDate.className = "d-flex flex-row justify-content-end p-1";
-    divDate.textContent = MessageDate;
+    divDate.textContent = dateStr;
+        //MessageDate;
 
     divBlock.appendChild(inputRoomId);
     divBlock.appendChild(divName);
