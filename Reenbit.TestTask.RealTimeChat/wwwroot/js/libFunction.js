@@ -140,6 +140,7 @@ function EditMessage(MessageId, MessageText) {
 }
 
 function deleteMessage(MessageId) {
+    console.log(document.getElementById("message-" + MessageId));
     document.getElementById("message-" + MessageId).remove();
 }
 

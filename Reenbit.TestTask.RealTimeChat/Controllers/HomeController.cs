@@ -102,7 +102,7 @@ namespace Reenbit.TestTask.RealTimeChat.Controllers
         public async Task<IActionResult> DeleteForAll(Message message)
         {
             var deleteMessage = _chatDBContext.Messages.FirstOrDefault(x => x.Id == message.Id);
-            await _hubContext.Clients.Groups(deleteMessage.RoomId.ToString()).SendAsync("EditMessage", message.Id, message.TextMessage);
+            await _hubContext.Clients.Groups(deleteMessage.RoomId.ToString()).SendAsync("DeleteMessage", message.Id);
             _chatDBContext.Messages.Remove(deleteMessage);
             await _chatDBContext.SaveChangesAsync();
             return Ok(message);
