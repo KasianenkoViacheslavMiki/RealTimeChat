@@ -143,31 +143,3 @@ function deleteMessage(MessageId) {
     console.log(document.getElementById("message-" + MessageId));
     document.getElementById("message-" + MessageId).remove();
 }
-
-function typeMessage() {
-    var typeMessage = Object.create({},
-        {
-            TextMessage: {
-                writable: true,
-                configurable: true,
-                value: ""
-            },
-            UserName: {
-                writable: true,
-                configurable: true,
-                value: ""
-            },
-            IdUser: {
-                writable: true,
-                configurable: true,
-                value: 0
-            },
-            IdRoom: {
-                writable: true,
-                configurable: true,
-                value: 0
-            }
-        }
-    );
-    return typeMessage;
-}
